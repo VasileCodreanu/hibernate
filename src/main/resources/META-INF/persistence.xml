@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence version="3.0"
+  xmlns="https://jakarta.ee/xml/ns/persistence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+             https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+
+  <persistence-unit name="jpa-hibernate-mysql">
+
+    <!--        <exclude-unlisted-classes>true</exclude-unlisted-classes>-->
+    <description>Hibernate Entity Manager Example</description>
+    <!--    Persistence provider Specify HibernatePersistenceProvider, so the application knows we're using Hibernate as our JPA provider. &ndash;&gt;&ndash;&gt;-->
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <!--        <class>com.geekcap.javaworld.jpa.model.Author</class>-->
+
+    <properties>
+      <property name="jakarta.persistence.jdbc.driver"    value="com.mysql.cj.jdbc.Driver" />
+      <property name="jakarta.persistence.jdbc.url"       value="jdbc:mysql://localhost:3306/school" />
+      <property name="jakarta.persistence.jdbc.user"      value="root" />
+      <property name="jakarta.persistence.jdbc.password"  value="014520qazPLM" />
+<!--      mysqlroot-->
+      <!-- Schema configuration next: Create and initialize the database-->
+      <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
+      <!--                <property name="jakarta.persistence.schema-generation.create-script-source" value="create-db.sql" />-->
+      <!--                <property name="jakarta.persistence.schema-generation.drop-script-source" value="drop-db.sql" />-->
+      <!--                <property name="jakarta.persistence.sql-load-script-source" value="data.sql" />-->
+
+      <property name="hibernate.dialect"    value="org.hibernate.dialect.MySQLDialect" />
+      <!-- Logging -->
+      <property name="hibernate.show_sql"   value="true" />
+<!--      <property name="hibernate.format_sql" value="true" />-->
+    </properties>
+  </persistence-unit>
+</persistence>
+
+<!--in production use value="none"-->
+  <!--            <property name="hibernate.hbm2ddl.auto"             value="update" />-->
+
+  <!--If you are using Hibernate's proprietary API, you'll need the hibernate.cfg.xml. -->
+  <!--        If you are using JPA i.e. Hibernate EntityManager, you will need the persistence.xml.-->
+
+
+         <!-- JPA 3.x  Specify Validation Groups-->
+  <!--        If you activate the automatic validation or rely on the default behavior, you can define custom groups which get validated -->
+  <!--        before the persistence provider executes the persist, update or remove operations. You can configure one or more groups for-->
+  <!--        each lifecycle state change by using the properties:-->
+  <!--<property name="jakarta.persistence.validation.group.pre-persist" value="jakarta.validation.groups.MyPersistValidation"/>-->
+  <!--<property name="jakarta.persistence.validation.group.pre-update" value="jakarta.validation.groups.MyUpdateValidation"/>-->
+  <!--<property name="jakarta.persistence.validation.group.pre-remove" value="jakarta.validation.groups.MyRemovetValidation"/>-->
+  <!-- -->
