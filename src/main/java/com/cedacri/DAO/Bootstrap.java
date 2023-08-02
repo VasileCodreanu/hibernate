@@ -2,6 +2,7 @@ package com.cedacri.DAO;
 
 import com.cedacri.model.Address;
 import com.cedacri.model.Course;
+import com.cedacri.model.CourseMaterial;
 import com.cedacri.model.Gender;
 import com.cedacri.model.Student;
 import com.cedacri.model.Teacher;
@@ -35,8 +36,12 @@ public class Bootstrap {
       return null;
     });
 
+    CourseMaterial javaCourseMaterial = new CourseMaterial("java site:google.com");
+    CourseMaterial hibernateCourseMaterial = new CourseMaterial("hibernate site:google.com");
+
     Course hibernateCourse = new Course("hibernate");
       hibernateCourse.addTeacher(teacherSam);
+      hibernateCourse.addCourseMaterial(hibernateCourseMaterial);
       hibernateCourse.addStudent(jacky);
       hibernateCourse.addStudent(tom);
 
@@ -46,18 +51,14 @@ public class Bootstrap {
       });
 
     Course javaCourse = new Course("java");
-      hibernateCourse.addTeacher(teacherSam);
-      hibernateCourse.addStudent(tom);
+    javaCourse.addTeacher(teacherSam);
+    javaCourse.addCourseMaterial(javaCourseMaterial);
+    javaCourse.addStudent(tom);
 
       jpaService.runInTransaction(entityManager -> {
         entityManager.persist(javaCourse);
         return null;
       });
-
-
-
-
-
 
 //    try {
 //      jpaService.runInTransaction(entityManager -> {
@@ -69,7 +70,4 @@ public class Bootstrap {
 //      jpaService.shutdown();
 //    }
   }
-
-
-
 }

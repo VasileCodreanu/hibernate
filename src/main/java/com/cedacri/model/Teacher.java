@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,11 +20,11 @@ import lombok.Setter;
 public class Teacher {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long teacherId;
+  private Long id;
   private String firstName;
   private String lastName;
 
-  @OneToMany(mappedBy = "teacher", cascade = {CascadeType.ALL})
+  @ManyToMany(mappedBy = "teachers")
   private Set<Course> courses=new HashSet<>();
 
   public Teacher(String firstName, String lastName) {
@@ -33,11 +34,11 @@ public class Teacher {
 
   public void addCourse(Course course){
     courses.add(course);
-    course.setTeacher(this);
+//    course.setTeacher(this);
   }
   public void removeCourse(Course course) {
     courses.remove(course);
-    course.setTeacher(null);
+//    course.setTeacher(null);
   }
 }
 

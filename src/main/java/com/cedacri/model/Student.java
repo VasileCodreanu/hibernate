@@ -31,18 +31,14 @@ import org.hibernate.Hibernate;
 public class Student {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long studentId;
+  private Long id;
   private String firstName;
   private String lastName;
   private String dob;
   private Gender gender;
 
-  @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE } )//..
-  @JoinTable(
-      name = "join_table_course_student",
-      joinColumns = @JoinColumn(name = "student_id"),
-      inverseJoinColumns = @JoinColumn(name = "course_id"))
-  private Set<Course> coursesList =  new HashSet<>();
+  @ManyToMany(mappedBy = "students")
+  private Set<Course> courses =  new HashSet<>();
 
   @Embedded
   @AttributeOverrides({
@@ -57,20 +53,6 @@ public class Student {
     this.address = address;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
-    Student student = (Student) o;
-    return getStudentId() != null && Objects.equals(getStudentId(), student.getStudentId());
-  }
 
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
-  }
+
 }

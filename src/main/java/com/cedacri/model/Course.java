@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -26,108 +27,79 @@ import org.hibernate.Hibernate;
 public class Course {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long courseId;
+  private Long id;
   private String title;
 
-  @ManyToMany(mappedBy = "coursesList")
-  private Set<Student> studentList=  new HashSet<>();
+  @ManyToMany()
+  @JoinTable(
+      name = "join_table_course_student",
+      joinColumns = @JoinColumn(name = "fk_course", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "fk_student", referencedColumnName = "id"))
+  private Set<Student> students;
 
-  // unidirectional from many to one
-  @ManyToOne()//cascade = {CascadeType.ALL}
-  @JoinColumn(name = "teacher_id")//aici se face FK pentru Teacher(care este numele la Fk in acest tabel)
-  //Why? By saying "cascade ALL" on the child entity Transaction you require that every DB operation gets propagated to the parent entity Account. If you then do persist(transaction), persist(account) will be invoked as well.
-  private Teacher teacher;
+  @ManyToMany()//cascade = {CascadeType.ALL}
+  @JoinTable(
+      name = "join_table_course_teacher",
+      joinColumns = @JoinColumn(name = "fk_course", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "fk_teacher", referencedColumnName = "id"))
+  private Set<Teacher> teachers;
 
-//  @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
   @OneToOne(mappedBy = "course", cascade = CascadeType.ALL)
-  private CourseMaterial courseMaterialList;
+  private CourseMaterial courseMaterial;
 
   public Course(String title) {
     this.title = title;
   }
 
-
-  public void addStudent(Student student) {
-    this.studentList.add(student);
-    student.getCoursesList().add(this);
+  public void addCourseMaterial(CourseMaterial courseMaterial){
+    this.courseMaterial = courseMaterial;
+    courseMaterial.setCourse(this);
   }
-
-  public void removeStudent(Student student) {
-    studentList.remove(student);
-    student.setCoursesList(null);
-  }
-
+  //    public void removeCourseMaterial(Teacher teacher) {
+//        this.teachers.remove(teacher);
+//        teacher.getCourses().remove(this);
+//    }
   public void addTeacher(Teacher teacher){
-    if (teacher != null) {
-      teacher.getCourses().add(this);
-    } else if (this.teacher != null) {
-      this.teacher.getCourses().remove(this);
+    if(this.teachers == null){
+      teachers =  new HashSet<>();
     }
-    this.teacher = teacher;
+    this.teachers.add(teacher);
+    teacher.getCourses().add(this);
+  }
+  public void removeTeacher(Teacher teacher) {
+    this.teachers.remove(teacher);
+    teacher.getCourses().remove(this);
+  }
+  public void addStudent(Student student){
+    if(this.students == null){
+      this.students =  new HashSet<>();
+    }
+    this.students.add(student);
+    student.getCourses().add(this);
+  }
+  public void removeStudent(Student student) {
+    this.students.remove(student);
+    student.getCourses().remove(this);
   }
 
-//  public void addStudent(Student student) {
-//    this.studentList.add(student);
-//  }
-
-  @Override
-  public String toString() {
-    return "Course{" +
-        "courseId=" + courseId +
-        ", title='" + title + '\'' +
-        ", studentList=" + studentList +
-        ", teacher=" + teacher +
-        ", courseMaterialList=" + courseMaterialList +
-        '}';
-  }
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
     Course course = (Course) o;
-
-    if (!Objects.equals(courseId, course.courseId)) {
-      return false;
-    }
-    if (!Objects.equals(title, course.title)) {
-      return false;
-    }
-    if (!Objects.equals(studentList, course.studentList)) {
-      return false;
-    }
-    if (!Objects.equals(teacher, course.teacher)) {
-      return false;
-    }
-    return Objects.equals(courseMaterialList, course.courseMaterialList);
+    return Objects.equals(id, course.id) && Objects.equals(title, course.title);
   }
 
   @Override
   public int hashCode() {
-    int result = courseId != null ? courseId.hashCode() : 0;
-    result = 31 * result + (title != null ? title.hashCode() : 0);
-    result = 31 * result + (studentList != null ? studentList.hashCode() : 0);
-    result = 31 * result + (teacher != null ? teacher.hashCode() : 0);
-    result = 31 * result + (courseMaterialList != null ? courseMaterialList.hashCode() : 0);
-    return result;
+    return Objects.hash(id, title);
   }
 
-//mappedBy property is what we use to tell Hibernate which variable we are using to represent the parent class in our child class.
-  // mappedBy flag in the @OneToMany annotation on the referencing side.
-
-  //We keep our @ManyToOne mapping on the Course entity.  the use of the mappedBy flag in the @OneToMany annotation on the referencing side. Without it, we wouldn't have a two-way relationship. We'd have two one-way relationships. Both entities would be mapping foreign keys for the other entity.
-  //With it, we're telling JPA that the field is already mapped by another entity. It's mapped by the teacher field of the Course entity.
-
-  //JPA specification under section 2.9, it's a good practice to mark the many-to-one side as the owning side.
-  //Item would be the owning side and Cart the inverse side
-  //By including the mappedBy attribute in the Cart class, we mark it as the inverse side. At the same time, we also annotate the Item.cart field with @ManyToOne, making Item the owning side.
-
-  //The @JoinColumn annotation defines the actual physical mapping on the owning side. On the other hand, the referencing side is defined using the mappedBy attribute of the @OneToMany annotation.
+//JPA specification under section 2.9, it's a good practice to mark the many-to-one side as the owning side.
+  //tem would be the owning side and Cart the inverse side
+  //By including the mappedBy attribute in the Cart class, we mark it as the inverse side.
+  //At the same time, we also annotate the Item.cart field with @ManyToOne, making Item the owning side.
 
   //    session.persist(person);
   //    session.flush();
@@ -157,6 +129,4 @@ public class Course {
   //CascadeType.REPLICATE
   //The replicate operation is used when we have more than one data source and we want the data in sync.
   // With CascadeType.REPLICATE, a sync operation also propagates to child entities whenever performed on the parent entity.
-
-
 }

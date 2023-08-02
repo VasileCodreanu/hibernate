@@ -18,6 +18,10 @@ public class JpaService {
     return instance == null ? instance = new JpaService() : instance;
   }
 
+  public EntityManager getTransaction(){
+    return entityManagerFactory.createEntityManager();
+  }
+
   public <T> T runInTransaction(Function<EntityManager, T> function) {
     EntityManager entityManager = entityManagerFactory.createEntityManager();
     EntityTransaction transaction = entityManager.getTransaction();
@@ -35,14 +39,12 @@ public class JpaService {
       }
     }
   }
-
+  //When we're finished with all of our queries, we need to close both the EntityManager
+  // and the EntityManagerFactory; otherwise their threads will live on and our application will never complete
   public void shutdown() {
     if (entityManagerFactory != null) {
       entityManagerFactory.close();
       instance = null;
     }
   }
-
-  //When we're finished with all of our queries, we need to close both the EntityManager
-  // and the EntityManagerFactory; otherwise their threads will live on and our application will never complete
 }
