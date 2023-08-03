@@ -16,25 +16,17 @@ public class TeacherDao implements Dao<Teacher> {
 
   @Override
   public Optional<Teacher> getById(Long id) {
-    em.getTransaction().begin();
     Teacher teacher = em.find(Teacher.class, id);
-
     em.detach(teacher);
-    em.flush();
-    em.getTransaction().commit();
     return teacher != null ? Optional.of(teacher) : Optional.empty();
   }
 
   @Override
   public Set<Teacher> getAll() {
-    em.getTransaction().begin();
     TypedQuery<Teacher> query = em.createQuery("SELECT t from Teacher t", Teacher.class);
     List<Teacher> teachers = query.getResultList();
-    em.flush();
-    em.getTransaction().commit();
     return Set.copyOf(teachers);
   }
-
 
   @Override
   public Optional<Teacher> save(Teacher teacher) {

@@ -5,7 +5,6 @@ import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-
 @Embeddable
 @AllArgsConstructor
 @NoArgsConstructor

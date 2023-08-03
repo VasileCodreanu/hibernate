@@ -16,21 +16,15 @@ public class CourseDao implements Dao<Course>{
 
   @Override
   public Optional<Course> getById(Long id) {
-    em.getTransaction().begin();
     Course course = em.find(Course.class, id);
     em.detach(course);
-//        em.flush();
-    em.getTransaction().commit();
     return course != null ? Optional.of(course) : Optional.empty();
   }
 
   @Override
   public Set<Course> getAll() {
-    em.getTransaction().begin();
     TypedQuery<Course> query = em.createQuery("SELECT c from Course c", Course.class);
     List<Course> courses = query.getResultList();
-//        em.flush();
-    em.getTransaction().commit();
     return Set.copyOf(courses);
   }
 

@@ -1,4 +1,4 @@
-package com.cedacri.DAO;
+package com.cedacri.bootstrap;
 
 import com.cedacri.model.Address;
 import com.cedacri.model.Course;
@@ -59,15 +59,5 @@ public class Bootstrap {
         entityManager.persist(javaCourse);
         return null;
       });
-
-//    try {
-//      jpaService.runInTransaction(entityManager -> {
-//        entityManager.persist(teacher);
-//        return null;
-//      });
-//
-//    }finally {
-//      jpaService.shutdown();
-//    }
   }
 }

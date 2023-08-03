@@ -17,21 +17,14 @@ public class StudentDao implements Dao<Student>{
 
   @Override
   public Optional<Student> getById(Long id) {
-    em.getTransaction().begin();
     Student student = em.find(Student.class, id);
-    em.detach(student);
-//        em.flush();
-    em.getTransaction().commit();
     return student != null ? Optional.of(student) : Optional.empty();
   }
 
   @Override
   public Set<Student> getAll() {
-    em.getTransaction().begin();
     TypedQuery<Student> query = em.createQuery("SELECT s from Student s", Student.class);
     List<Student> students = query.getResultList();
-//        em.flush();
-    em.getTransaction().commit();
     return Set.copyOf(students);
   }
 

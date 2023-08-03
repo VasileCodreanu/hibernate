@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,26 +28,36 @@ public class Teacher {
   @ManyToMany(mappedBy = "teachers")
   private Set<Course> courses=new HashSet<>();
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    Teacher teacher = (Teacher) o;
+
+    if (!Objects.equals(id, teacher.id)) {
+      return false;
+    }
+    if (!Objects.equals(firstName, teacher.firstName)) {
+      return false;
+    }
+    return Objects.equals(lastName, teacher.lastName);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = id != null ? id.hashCode() : 0;
+    result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+    result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+    return result;
+  }
+
   public Teacher(String firstName, String lastName) {
     this.firstName = firstName;
     this.lastName = lastName;
   }
-
-  public void addCourse(Course course){
-    courses.add(course);
-//    course.setTeacher(this);
-  }
-  public void removeCourse(Course course) {
-    courses.remove(course);
-//    course.setTeacher(null);
-  }
 }
-
-
-
-//A bidirectional mapping always requires a mappedBy side.
-// lower-level details are now mapped by “the property on the other side,” named teacher.
-//When we make the User persistent, Hibernate makes the shippingAddress persistent and generates the identifier for the primary key automatically.
-
-//Note: It's a good practice to put the owning side of a relationship
-// in the cl

@@ -15,20 +15,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class StudentDaoTest {
-
   private StudentDao studentDao;
   private static Student firstStudent;
   private static Student secondStudent;
 
   @BeforeAll
-  static void beforeAll() {
-
-  }
+  static void beforeAll() {}
 
   @BeforeEach
   void setUp() {
-    JpaService jpaService = JpaService.getInstance();
-    EntityManager em = jpaService.getTransaction();
+    EntityManager em = JpaService.getInstance().getTransaction();
     studentDao = new StudentDao(em);
 
     firstStudent  = new Student("firstStudent", "smith", LocalDate.now().toString()
@@ -64,8 +60,8 @@ class StudentDaoTest {
   void getAll() {
     studentDao.save(firstStudent).get();
     studentDao.save(secondStudent).get();
-
     Set<Student> students = studentDao.getAll();
+
     assertAll(
         () -> assertNotNull(students, "List of teachers should not be empty;"),
         () -> assertEquals(2, students.size(), "list size() should be equal 2"),
@@ -105,10 +101,10 @@ class StudentDaoTest {
     int sizeBeforeDelete = studentDao.getAll().size();
     studentDao.delete(savedStudent);
     int sizeAfterDelete = studentDao.getAll().size();
+
     assertAll(
         () -> assertEquals(sizeAfterDelete, sizeBeforeDelete - 1,
             "after delete Set size() should be size()-1")
     );
   }
-
 }

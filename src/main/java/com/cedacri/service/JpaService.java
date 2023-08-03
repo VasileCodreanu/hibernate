@@ -36,6 +36,7 @@ public class JpaService {
         transaction.commit();
       } else {
         transaction.rollback();
+        throw new RuntimeException("JpaService transaction.rollback();");
       }
     }
   }

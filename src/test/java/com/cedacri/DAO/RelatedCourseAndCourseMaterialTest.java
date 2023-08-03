@@ -19,8 +19,7 @@ class RelatedCourseAndCourseMaterialTest {
 
   @BeforeEach
   void setUp() {
-    JpaService jpaService = JpaService.getInstance();
-    EntityManager em = jpaService.getTransaction();
+    EntityManager em = JpaService.getInstance().getTransaction();
     dao = new RelatedCourseAndCourseMaterial(em);
 
     javaCourse =  new Course("Java");
@@ -30,7 +29,7 @@ class RelatedCourseAndCourseMaterialTest {
 
   @Test
   void saveCourseMaterial() {
-    Course savedJavaWithCourseMaterial = dao.saveCourseMaterial(javaCourse, javaCourseMaterial).get();//, javaCourse
+    Course savedJavaWithCourseMaterial = dao.saveCourseMaterial(javaCourse, javaCourseMaterial).get();
     assertAll(
         () -> assertNotNull(savedJavaWithCourseMaterial, "should return a valid entity(is returning NULL);"),
         () -> assertTrue(savedJavaWithCourseMaterial.getId() > 0,
@@ -42,15 +41,7 @@ class RelatedCourseAndCourseMaterialTest {
   void deleteCascadeCourseForCourseMaterial(){
     Course savedJavaWithCourseMaterial = dao.saveCourseMaterial(javaCourse, javaCourseMaterial).get();
     dao.deleteCascadeCourseForCourseMaterial(savedJavaWithCourseMaterial);
-
   }
-
-  @Test
-  void editCourseMaterialForCourseId(){
-
-  }
-
-
 
   @Test
   void updateCourseMaterialForCourseIdTest(){
@@ -62,6 +53,5 @@ class RelatedCourseAndCourseMaterialTest {
             "entity should return a valid DB id(id > 0);"),
         () -> assertEquals(1, courseMaterialByCourseId.getCourse().getId(), "getCourse().getId() should be: 1;")
     );
-
   }
 }

@@ -30,14 +30,14 @@ public class Course {
   private Long id;
   private String title;
 
-  @ManyToMany()
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(
       name = "join_table_course_student",
       joinColumns = @JoinColumn(name = "fk_course", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "fk_student", referencedColumnName = "id"))
   private Set<Student> students;
 
-  @ManyToMany()//cascade = {CascadeType.ALL}
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(
       name = "join_table_course_teacher",
       joinColumns = @JoinColumn(name = "fk_course", referencedColumnName = "id"),
@@ -55,10 +55,35 @@ public class Course {
     this.courseMaterial = courseMaterial;
     courseMaterial.setCourse(this);
   }
-  //    public void removeCourseMaterial(Teacher teacher) {
-//        this.teachers.remove(teacher);
-//        teacher.getCourses().remove(this);
-//    }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    Course course = (Course) o;
+
+    if (!Objects.equals(id, course.id)) {
+      return false;
+    }
+    return Objects.equals(title, course.title);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = id != null ? id.hashCode() : 0;
+    result = 31 * result + (title != null ? title.hashCode() : 0);
+    return result;
+  }
+
+  public void removeCourseMaterial(Teacher teacher) {
+        this.teachers.remove(teacher);
+        teacher.getCourses().remove(this);
+    }
   public void addTeacher(Teacher teacher){
     if(this.teachers == null){
       teachers =  new HashSet<>();
@@ -82,21 +107,7 @@ public class Course {
     student.getCourses().remove(this);
   }
 
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Course course = (Course) o;
-    return Objects.equals(id, course.id) && Objects.equals(title, course.title);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, title);
-  }
-
-//JPA specification under section 2.9, it's a good practice to mark the many-to-one side as the owning side.
+  //JPA specification under section 2.9, it's a good practice to mark the many-to-one side as the owning side.
   //tem would be the owning side and Cart the inverse side
   //By including the mappedBy attribute in the Cart class, we mark it as the inverse side.
   //At the same time, we also annotate the Item.cart field with @ManyToOne, making Item the owning side.

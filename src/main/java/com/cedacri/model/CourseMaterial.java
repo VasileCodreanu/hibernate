@@ -5,10 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.util.Objects;
-import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,10 +26,6 @@ public class CourseMaterial {
 
   private String courserUrl;
 
-  public CourseMaterial(String courserUrl) {
-    this.courserUrl = courserUrl;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -46,18 +40,18 @@ public class CourseMaterial {
     if (!Objects.equals(id, that.id)) {
       return false;
     }
-    if (!Objects.equals(course, that.course)) {
-      return false;
-    }
     return Objects.equals(courserUrl, that.courserUrl);
   }
 
   @Override
   public int hashCode() {
     int result = id != null ? id.hashCode() : 0;
-    result = 31 * result + (course != null ? course.hashCode() : 0);
     result = 31 * result + (courserUrl != null ? courserUrl.hashCode() : 0);
     return result;
+  }
+
+  public CourseMaterial(String courserUrl) {
+    this.courserUrl = courserUrl;
   }
 
   @Override

@@ -24,20 +24,16 @@ class TeacherDaoTest {
 
   @BeforeEach
   void setUp() {
-    JpaService jpaService = JpaService.getInstance();
-    EntityManager em = jpaService.getTransaction();
+    EntityManager em = JpaService.getInstance().getTransaction();
     teacherDao = new TeacherDao(em);
   }
 
-  @AfterEach
-  void tearDown(){
-    //close connection
-  }
   @Test
   void getById() {
     Teacher teacherToBeSaved = new Teacher("firstTeacher", "1teacher");
     Teacher savedTeacher = teacherDao.save(teacherToBeSaved).get();
     Teacher teacherById  = teacherDao.getById(savedTeacher.getId()).get();
+
     assertAll(
         () -> assertNotNull(teacherById, "should return a valid entity(is returning NULL);"),
         () -> assertTrue(teacherById.getId() > 0,
@@ -56,6 +52,7 @@ class TeacherDaoTest {
     teacherDao.save(firstTeacher).get();
     teacherDao.save(secondTeacher).get();
     Set<Teacher> teachers = teacherDao.getAll();
+
     assertAll(
         () -> assertNotNull(teachers, "List of teachers should not be empty;"),
         () -> assertEquals(2, teachers.size(), "list size() should be equal 2"),
@@ -67,6 +64,7 @@ class TeacherDaoTest {
   void save() {
     Teacher firstTeacher = new Teacher("firstTeacher", "1teacher");
     Teacher save = teacherDao.save(firstTeacher).get();
+
     assertAll(
         () -> assertNotNull(save, "should return a valid entity(is returning NULL);"),
         () -> assertTrue(save.getId() > 0,
@@ -79,6 +77,7 @@ class TeacherDaoTest {
     Teacher savedTeacher = teacherDao.save(secondTeacher).get();
     savedTeacher.setFirstName("updatedName");
     Teacher updatedTeacher = teacherDao.update(savedTeacher).get();
+
     assertAll(
         () -> assertNotNull(updatedTeacher, "Should return updated teacher, but entity is Null"),
         () -> assertEquals(updatedTeacher.getFirstName(), "updatedName",
@@ -94,6 +93,7 @@ class TeacherDaoTest {
     int sizeBeforeDelete = teacherDao.getAll().size();
     teacherDao.delete(savedTeacher);
     int sizeAfterDelete = teacherDao.getAll().size();
+
     assertAll(
         () -> assertEquals(sizeAfterDelete, sizeBeforeDelete - 1,
             "after delete Set size() should be size()-1")
