@@ -1,4 +1,8 @@
 
+
+## File with Credentials
+env.properties
+
 ##############################
 ## Visual Studio Code
 ##############################
@@ -35,6 +39,10 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
+/log/
+/target/
+# maven project related ignore files and directories
+.mvn/
 
 ##############################
 ## Gradle
@@ -54,33 +62,60 @@ gradle-app.setting
 .idea/
 .idea_modules/
 *.iml
-*.xml
+#*.xml
 *.ipr
 *.iws
-
-
+*.ids
+*.orig
+classes/
+out/
+# Add any directories, files, or patterns you don't want to be tracked by version control
+/.metadata/
+.classpath
+.editorconfig
+.factorypath
+.gitattributes
+.idea/codeStyles/
+.idea/inspectionProfiles/
+.idea/modifysf.iml
+.idea/modules.xml
+.idea/typescript-compiler.xml
+.idea/workspace.xml
+.project
+.settings/
+README.md
+mvnw.cmd
+node/
+node_modules/
+package-lock.json
+src/main/webapp/assets/sf/manifest.json
+src/main/webapp/assets/sumfox-logo-167x33-Copy.png
+yarn.lock
+/.idea/jsLibraryMappings.xml
+/.idea/libraries/tsconfig_roots.xml
+/.vscode/settings.json
+/out/production/main/com/eclinso/sumfox/config/MethodSecurityConfiguration.txt
+/src/main/main.iml
+/.idea/misc.xml
+/.idea/libraries
+.idea
+libraries
 ##############################
 ## Eclipse
 ##############################
-.settings/
-bin/
 tmp/
 .metadata
-.classpath
-.project
 *.tmp
 *.bak
 *.swp
 *~.nib
 local.properties
 .loadpath
-.factorypath
 
 ##############################
 ## NetBeans
 ##############################
 nbproject/private/
-build/
 nbbuild/
 dist/
 nbdist/
@@ -92,16 +127,6 @@ nb-configuration.xml
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,macos,maven,gradle,osx,visualstudiocode,eclipse,netbeans
 
 ### Eclipse ###
-.metadata
-bin/
-tmp/
-*.tmp
-*.bak
-*.swp
-*~.nib
-local.properties
-.settings/
-.loadpath
 .recommenders
 
 # External tool builders
@@ -118,9 +143,6 @@ local.properties
 
 # CDT- autotools
 .autotools
-
-# Java annotation processor (APT)
-.factorypath
 
 # PDT-specific (PHP Development Tools)
 .buildpath
@@ -157,37 +179,37 @@ local.properties
 # Spring Boot Tooling
 .sts4-cache/
 
-### Java ###
-# Compiled class file
-*.class
-
 # Log file
 *.log
 
 # BlueJ files
 *.ctxt
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
 
 # Package Files #
-*.jar
-*.war
-*.nar
-*.ear
+
 *.zip
 *.tar.gz
 *.rar
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
 replay_pid*
 
 ### macOS ###
 # General
-.DS_Store
 .AppleDouble
 .LSOverride
+.svn
+
+######################
+# Windows
+######################
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+Desktop.ini
+
 
 # Icon must end with two \r
 Icon
@@ -216,34 +238,23 @@ Temporary Items
 # iCloud generated files
 *.icloud
 
-### Maven ###
-target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/timing.properties
-# https://github.com/takari/maven-wrapper#usage-without-binary-jar
-.mvn/wrapper/maven-wrapper.jar
-
-# Eclipse m2e generated files
-# Eclipse Core
-.project
-# JDT-specific (Eclipse Java Development Tools)
-.classpath
 
 ### NetBeans ###
 **/nbproject/private/
 **/nbproject/Makefile-*.mk
 **/nbproject/Package-*.bash
-build/
-nbbuild/
-dist/
-nbdist/
+
 .nb-gradle/
+
+#######################
+## Gradle Wrapper
+#######################
+#!gradle/wrapper/gradle-wrapper.jar
+#
+#######################
+## Maven Wrapper
+#######################
+#!.mvn/wrapper/maven-wrapper.jar
 
 ### OSX ###
 # General
@@ -272,21 +283,11 @@ nbdist/
 .ionide
 
 ### Gradle ###
-.gradle
 **/build/
 !src/**/build/
 
-# Ignore Gradle GUI config
-gradle-app.setting
-
-# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
-!gradle-wrapper.jar
-
 # Avoid ignore Gradle wrappper properties
 !gradle-wrapper.properties
-
-# Cache of project
-.gradletasknamecache
 
 # Eclipse Gradle plugin generated files
 # Eclipse Core
